@@ -18,7 +18,7 @@
 //==============================================================================
 
 //@version=6
-indicator("✦ GXV SMT Divergences-Lite", overlay=true, max_labels_count=500, max_lines_count=500, max_bars_back=5000)
+indicator("✦ GXV SMT Divergences-Lite", overlay=true, max_labels_count=500, max_lines_count=500)
 import Gregorius_XV/GXVAssetCorrelationUtils/1 as GXV
 
 //==============================================================================
@@ -138,6 +138,13 @@ smt_manual_pair3_inverted = input.bool(false, "Inversed?", inline="smt_manual_pa
 //==============================================================================
 tf = timeframe.period
 tf_sec = timeframe.in_seconds(tf)
+
+// Only these series need dynamic lookbacks. Do not reserve 5000 bars for
+// every request payload, temporary object, and unrelated intermediate series.
+max_bars_back(open, 5000)
+max_bars_back(close, 5000)
+max_bars_back(time, 5000)
+max_bars_back(time_close, 1)
 f_is_mid_prefix(string px) =>
     px == "CAPITALCOM" or px == "CMCMARKETS"
 
@@ -256,22 +263,210 @@ type SmtRemoteCycle
     float aLow
     bool aComplete
 
+type SmtSourceBlock1
+    int r1_cOpen
+    int r1_cClose
+    float r1_cHigh
+    float r1_cLow
+    bool r1_cComplete
+    int r1_pOpen
+    int r1_pClose
+    float r1_pHigh
+    float r1_pLow
+    bool r1_pComplete
+    int r1_aOpen
+    int r1_aClose
+    float r1_aHigh
+    float r1_aLow
+    bool r1_aComplete
+    int r2_cOpen
+    int r2_cClose
+    float r2_cHigh
+    float r2_cLow
+    bool r2_cComplete
+    int r2_pOpen
+    int r2_pClose
+    float r2_pHigh
+    float r2_pLow
+    bool r2_pComplete
+    int r2_aOpen
+    int r2_aClose
+    float r2_aHigh
+    float r2_aLow
+    bool r2_aComplete
+    int r3_cOpen
+    int r3_cClose
+    float r3_cHigh
+    float r3_cLow
+    bool r3_cComplete
+    int r3_pOpen
+    int r3_pClose
+    float r3_pHigh
+    float r3_pLow
+    bool r3_pComplete
+    int r3_aOpen
+    int r3_aClose
+    float r3_aHigh
+    float r3_aLow
+    bool r3_aComplete
+    int r4_cOpen
+    int r4_cClose
+    float r4_cHigh
+    float r4_cLow
+    bool r4_cComplete
+    int r4_pOpen
+    int r4_pClose
+    float r4_pHigh
+    float r4_pLow
+    bool r4_pComplete
+    int r4_aOpen
+    int r4_aClose
+    float r4_aHigh
+    float r4_aLow
+    bool r4_aComplete
+    int r5_cOpen
+    int r5_cClose
+    float r5_cHigh
+    float r5_cLow
+    bool r5_cComplete
+    int r5_pOpen
+    int r5_pClose
+    float r5_pHigh
+    float r5_pLow
+    bool r5_pComplete
+    int r5_aOpen
+    int r5_aClose
+    float r5_aHigh
+    float r5_aLow
+    bool r5_aComplete
+    int r6_cOpen
+    int r6_cClose
+    float r6_cHigh
+    float r6_cLow
+    bool r6_cComplete
+    int r6_pOpen
+    int r6_pClose
+    float r6_pHigh
+    float r6_pLow
+    bool r6_pComplete
+    int r6_aOpen
+    int r6_aClose
+    float r6_aHigh
+    float r6_aLow
+    bool r6_aComplete
+    int r7_cOpen
+    int r7_cClose
+    float r7_cHigh
+    float r7_cLow
+    bool r7_cComplete
+    int r7_pOpen
+    int r7_pClose
+    float r7_pHigh
+    float r7_pLow
+    bool r7_pComplete
+    int r7_aOpen
+    int r7_aClose
+    float r7_aHigh
+    float r7_aLow
+    bool r7_aComplete
+
+type SmtSourceBlock2
+    int r8_cOpen
+    int r8_cClose
+    float r8_cHigh
+    float r8_cLow
+    bool r8_cComplete
+    int r8_pOpen
+    int r8_pClose
+    float r8_pHigh
+    float r8_pLow
+    bool r8_pComplete
+    int r8_aOpen
+    int r8_aClose
+    float r8_aHigh
+    float r8_aLow
+    bool r8_aComplete
+    int r9_cOpen
+    int r9_cClose
+    float r9_cHigh
+    float r9_cLow
+    bool r9_cComplete
+    int r9_pOpen
+    int r9_pClose
+    float r9_pHigh
+    float r9_pLow
+    bool r9_pComplete
+    int r9_aOpen
+    int r9_aClose
+    float r9_aHigh
+    float r9_aLow
+    bool r9_aComplete
+    int r10_cOpen
+    int r10_cClose
+    float r10_cHigh
+    float r10_cLow
+    bool r10_cComplete
+    int r10_pOpen
+    int r10_pClose
+    float r10_pHigh
+    float r10_pLow
+    bool r10_pComplete
+    int r10_aOpen
+    int r10_aClose
+    float r10_aHigh
+    float r10_aLow
+    bool r10_aComplete
+    int r11_cOpen
+    int r11_cClose
+    float r11_cHigh
+    float r11_cLow
+    bool r11_cComplete
+    int r11_pOpen
+    int r11_pClose
+    float r11_pHigh
+    float r11_pLow
+    bool r11_pComplete
+    int r11_aOpen
+    int r11_aClose
+    float r11_aHigh
+    float r11_aLow
+    bool r11_aComplete
+    int r12_cOpen
+    int r12_cClose
+    float r12_cHigh
+    float r12_cLow
+    bool r12_cComplete
+    int r12_pOpen
+    int r12_pClose
+    float r12_pHigh
+    float r12_pLow
+    bool r12_pComplete
+    int r12_aOpen
+    int r12_aClose
+    float r12_aHigh
+    float r12_aLow
+    bool r12_aComplete
+    int r13_cOpen
+    int r13_cClose
+    float r13_cHigh
+    float r13_cLow
+    bool r13_cComplete
+    int r13_pOpen
+    int r13_pClose
+    float r13_pHigh
+    float r13_pLow
+    bool r13_pComplete
+    int r13_aOpen
+    int r13_aClose
+    float r13_aHigh
+    float r13_aLow
+    bool r13_aComplete
+
 type SmtSourcePacket
     int sampleTime
     int sampleClose
-    SmtRemoteCycle r1
-    SmtRemoteCycle r2
-    SmtRemoteCycle r3
-    SmtRemoteCycle r4
-    SmtRemoteCycle r5
-    SmtRemoteCycle r6
-    SmtRemoteCycle r7
-    SmtRemoteCycle r8
-    SmtRemoteCycle r9
-    SmtRemoteCycle r10
-    SmtRemoteCycle r11
-    SmtRemoteCycle r12
-    SmtRemoteCycle r13
+    SmtSourceBlock1 firstRanks
+    SmtSourceBlock2 lastRanks
 
 f_smt_accumulate(SmtCycle st, int windowOpen, int windowClose, float srcHigh, float srcLow, int srcTime, int srcClose, int srcBar, int priorClose) =>
     bool clockReady = not na(windowOpen) and not na(windowClose) and windowClose > windowOpen and not na(srcTime) and not na(srcClose)
@@ -303,9 +498,9 @@ f_smt_accumulate(SmtCycle st, int windowOpen, int windowClose, float srcHigh, fl
 
 f_smt_source_cycle(int windowOpen, int windowClose, bool enabled) =>
     var SmtCycle st = SmtCycle.new(SmtCandle.new(), SmtCandle.new(), SmtCandle.new())
-    // Copy before mutation: older snapshots and prior executions never share a
-    // mutable current candle. Ordinary Pine rollback controls developing prices.
-    st := SmtCycle.new(st.current.copy(), st.previous, st.older, st.crossingEnd)
+    // No consumer reads st[1]. Rollover allocates a fresh current candle and
+    // never mutates closed candles. Ordinary var rollback restores live fields;
+    // copying the wrapper/current on every bar only retains redundant objects.
     if enabled
         f_smt_accumulate(st, windowOpen, windowClose, high, low, time, time_close, bar_index, time_close[1])
     st
@@ -324,7 +519,8 @@ f_smt_source_cycles() =>
     SmtCycle r11 = f_smt_source_cycle(time("1M"), time_close("1M"), tf_ok_1m)
     SmtCycle r12 = f_smt_source_cycle(time("3M"), time_close("3M"), tf_ok_3m)
     SmtCycle r13 = f_smt_source_cycle(time("12M"), time_close("12M"), tf_ok_12m)
-    SmtCycleSet.new(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
+    var SmtCycleSet source = SmtCycleSet.new(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
+    source
 
 f_smt_compact_cycle(SmtCycle st) =>
     SmtCandle c = st.current
@@ -334,16 +530,49 @@ f_smt_compact_cycle(SmtCycle st) =>
 
 f_smt_source_packet() =>
     SmtCycleSet source = f_smt_source_cycles()
-    SmtSourcePacket.new(time, time_close, f_smt_compact_cycle(source.r1), f_smt_compact_cycle(source.r2), f_smt_compact_cycle(source.r3), f_smt_compact_cycle(source.r4), f_smt_compact_cycle(source.r5), f_smt_compact_cycle(source.r6), f_smt_compact_cycle(source.r7), f_smt_compact_cycle(source.r8), f_smt_compact_cycle(source.r9), f_smt_compact_cycle(source.r10), f_smt_compact_cycle(source.r11), f_smt_compact_cycle(source.r12), f_smt_compact_cycle(source.r13))
+    SmtCycle r1 = source.r1
+    SmtCycle r2 = source.r2
+    SmtCycle r3 = source.r3
+    SmtCycle r4 = source.r4
+    SmtCycle r5 = source.r5
+    SmtCycle r6 = source.r6
+    SmtCycle r7 = source.r7
+    SmtCycle r8 = source.r8
+    SmtCycle r9 = source.r9
+    SmtCycle r10 = source.r10
+    SmtCycle r11 = source.r11
+    SmtCycle r12 = source.r12
+    SmtCycle r13 = source.r13
+    // Two scalar-only blocks keep constructors below 254 external elements.
+    // Three transported IDs replace the original fourteen, with all 197 values
+    // unchanged. Keep full precision, native intervals, and all three windows.
+    SmtSourceBlock1 firstRanks = SmtSourceBlock1.new(r1.current.openTime, r1.current.closeTime, r1.current.hi, r1.current.lo, r1.current.complete, r1.previous.openTime, r1.previous.closeTime, r1.previous.hi, r1.previous.lo, r1.previous.complete, r1.older.openTime, r1.older.closeTime, r1.older.hi, r1.older.lo, r1.older.complete, r2.current.openTime, r2.current.closeTime, r2.current.hi, r2.current.lo, r2.current.complete, r2.previous.openTime, r2.previous.closeTime, r2.previous.hi, r2.previous.lo, r2.previous.complete, r2.older.openTime, r2.older.closeTime, r2.older.hi, r2.older.lo, r2.older.complete, r3.current.openTime, r3.current.closeTime, r3.current.hi, r3.current.lo, r3.current.complete, r3.previous.openTime, r3.previous.closeTime, r3.previous.hi, r3.previous.lo, r3.previous.complete, r3.older.openTime, r3.older.closeTime, r3.older.hi, r3.older.lo, r3.older.complete, r4.current.openTime, r4.current.closeTime, r4.current.hi, r4.current.lo, r4.current.complete, r4.previous.openTime, r4.previous.closeTime, r4.previous.hi, r4.previous.lo, r4.previous.complete, r4.older.openTime, r4.older.closeTime, r4.older.hi, r4.older.lo, r4.older.complete, r5.current.openTime, r5.current.closeTime, r5.current.hi, r5.current.lo, r5.current.complete, r5.previous.openTime, r5.previous.closeTime, r5.previous.hi, r5.previous.lo, r5.previous.complete, r5.older.openTime, r5.older.closeTime, r5.older.hi, r5.older.lo, r5.older.complete, r6.current.openTime, r6.current.closeTime, r6.current.hi, r6.current.lo, r6.current.complete, r6.previous.openTime, r6.previous.closeTime, r6.previous.hi, r6.previous.lo, r6.previous.complete, r6.older.openTime, r6.older.closeTime, r6.older.hi, r6.older.lo, r6.older.complete, r7.current.openTime, r7.current.closeTime, r7.current.hi, r7.current.lo, r7.current.complete, r7.previous.openTime, r7.previous.closeTime, r7.previous.hi, r7.previous.lo, r7.previous.complete, r7.older.openTime, r7.older.closeTime, r7.older.hi, r7.older.lo, r7.older.complete)
+    SmtSourceBlock2 lastRanks = SmtSourceBlock2.new(r8.current.openTime, r8.current.closeTime, r8.current.hi, r8.current.lo, r8.current.complete, r8.previous.openTime, r8.previous.closeTime, r8.previous.hi, r8.previous.lo, r8.previous.complete, r8.older.openTime, r8.older.closeTime, r8.older.hi, r8.older.lo, r8.older.complete, r9.current.openTime, r9.current.closeTime, r9.current.hi, r9.current.lo, r9.current.complete, r9.previous.openTime, r9.previous.closeTime, r9.previous.hi, r9.previous.lo, r9.previous.complete, r9.older.openTime, r9.older.closeTime, r9.older.hi, r9.older.lo, r9.older.complete, r10.current.openTime, r10.current.closeTime, r10.current.hi, r10.current.lo, r10.current.complete, r10.previous.openTime, r10.previous.closeTime, r10.previous.hi, r10.previous.lo, r10.previous.complete, r10.older.openTime, r10.older.closeTime, r10.older.hi, r10.older.lo, r10.older.complete, r11.current.openTime, r11.current.closeTime, r11.current.hi, r11.current.lo, r11.current.complete, r11.previous.openTime, r11.previous.closeTime, r11.previous.hi, r11.previous.lo, r11.previous.complete, r11.older.openTime, r11.older.closeTime, r11.older.hi, r11.older.lo, r11.older.complete, r12.current.openTime, r12.current.closeTime, r12.current.hi, r12.current.lo, r12.current.complete, r12.previous.openTime, r12.previous.closeTime, r12.previous.hi, r12.previous.lo, r12.previous.complete, r12.older.openTime, r12.older.closeTime, r12.older.hi, r12.older.lo, r12.older.complete, r13.current.openTime, r13.current.closeTime, r13.current.hi, r13.current.lo, r13.current.complete, r13.previous.openTime, r13.previous.closeTime, r13.previous.hi, r13.previous.lo, r13.previous.complete, r13.older.openTime, r13.older.closeTime, r13.older.hi, r13.older.lo, r13.older.complete)
+    SmtSourcePacket.new(time, time_close, firstRanks, lastRanks)
 
 f_smt_local_cycle(SmtCycleSet source, int rank) =>
     rank == 1 ? source.r1 : rank == 2 ? source.r2 : rank == 3 ? source.r3 : rank == 4 ? source.r4 : rank == 5 ? source.r5 : rank == 6 ? source.r6 : rank == 7 ? source.r7 : rank == 8 ? source.r8 : rank == 9 ? source.r9 : rank == 10 ? source.r10 : rank == 11 ? source.r11 : rank == 12 ? source.r12 : source.r13
 
 f_smt_remote_cycle(SmtSourcePacket source, int rank) =>
-    SmtRemoteCycle result = na
+    // Each written rank/pair path owns one reusable adapter; no past ID is read.
+    var SmtRemoteCycle cached = SmtRemoteCycle.new(na, na, na, na, false, na, na, na, na, false, na, na, na, na, false)
     if not na(source)
-        result := rank == 1 ? source.r1 : rank == 2 ? source.r2 : rank == 3 ? source.r3 : rank == 4 ? source.r4 : rank == 5 ? source.r5 : rank == 6 ? source.r6 : rank == 7 ? source.r7 : rank == 8 ? source.r8 : rank == 9 ? source.r9 : rank == 10 ? source.r10 : rank == 11 ? source.r11 : rank == 12 ? source.r12 : source.r13
-    result
+        cached.cOpen := rank == 1 ? source.firstRanks.r1_cOpen : rank == 2 ? source.firstRanks.r2_cOpen : rank == 3 ? source.firstRanks.r3_cOpen : rank == 4 ? source.firstRanks.r4_cOpen : rank == 5 ? source.firstRanks.r5_cOpen : rank == 6 ? source.firstRanks.r6_cOpen : rank == 7 ? source.firstRanks.r7_cOpen : rank == 8 ? source.lastRanks.r8_cOpen : rank == 9 ? source.lastRanks.r9_cOpen : rank == 10 ? source.lastRanks.r10_cOpen : rank == 11 ? source.lastRanks.r11_cOpen : rank == 12 ? source.lastRanks.r12_cOpen : source.lastRanks.r13_cOpen
+        cached.cClose := rank == 1 ? source.firstRanks.r1_cClose : rank == 2 ? source.firstRanks.r2_cClose : rank == 3 ? source.firstRanks.r3_cClose : rank == 4 ? source.firstRanks.r4_cClose : rank == 5 ? source.firstRanks.r5_cClose : rank == 6 ? source.firstRanks.r6_cClose : rank == 7 ? source.firstRanks.r7_cClose : rank == 8 ? source.lastRanks.r8_cClose : rank == 9 ? source.lastRanks.r9_cClose : rank == 10 ? source.lastRanks.r10_cClose : rank == 11 ? source.lastRanks.r11_cClose : rank == 12 ? source.lastRanks.r12_cClose : source.lastRanks.r13_cClose
+        cached.cHigh := rank == 1 ? source.firstRanks.r1_cHigh : rank == 2 ? source.firstRanks.r2_cHigh : rank == 3 ? source.firstRanks.r3_cHigh : rank == 4 ? source.firstRanks.r4_cHigh : rank == 5 ? source.firstRanks.r5_cHigh : rank == 6 ? source.firstRanks.r6_cHigh : rank == 7 ? source.firstRanks.r7_cHigh : rank == 8 ? source.lastRanks.r8_cHigh : rank == 9 ? source.lastRanks.r9_cHigh : rank == 10 ? source.lastRanks.r10_cHigh : rank == 11 ? source.lastRanks.r11_cHigh : rank == 12 ? source.lastRanks.r12_cHigh : source.lastRanks.r13_cHigh
+        cached.cLow := rank == 1 ? source.firstRanks.r1_cLow : rank == 2 ? source.firstRanks.r2_cLow : rank == 3 ? source.firstRanks.r3_cLow : rank == 4 ? source.firstRanks.r4_cLow : rank == 5 ? source.firstRanks.r5_cLow : rank == 6 ? source.firstRanks.r6_cLow : rank == 7 ? source.firstRanks.r7_cLow : rank == 8 ? source.lastRanks.r8_cLow : rank == 9 ? source.lastRanks.r9_cLow : rank == 10 ? source.lastRanks.r10_cLow : rank == 11 ? source.lastRanks.r11_cLow : rank == 12 ? source.lastRanks.r12_cLow : source.lastRanks.r13_cLow
+        cached.cComplete := rank == 1 ? source.firstRanks.r1_cComplete : rank == 2 ? source.firstRanks.r2_cComplete : rank == 3 ? source.firstRanks.r3_cComplete : rank == 4 ? source.firstRanks.r4_cComplete : rank == 5 ? source.firstRanks.r5_cComplete : rank == 6 ? source.firstRanks.r6_cComplete : rank == 7 ? source.firstRanks.r7_cComplete : rank == 8 ? source.lastRanks.r8_cComplete : rank == 9 ? source.lastRanks.r9_cComplete : rank == 10 ? source.lastRanks.r10_cComplete : rank == 11 ? source.lastRanks.r11_cComplete : rank == 12 ? source.lastRanks.r12_cComplete : source.lastRanks.r13_cComplete
+        cached.pOpen := rank == 1 ? source.firstRanks.r1_pOpen : rank == 2 ? source.firstRanks.r2_pOpen : rank == 3 ? source.firstRanks.r3_pOpen : rank == 4 ? source.firstRanks.r4_pOpen : rank == 5 ? source.firstRanks.r5_pOpen : rank == 6 ? source.firstRanks.r6_pOpen : rank == 7 ? source.firstRanks.r7_pOpen : rank == 8 ? source.lastRanks.r8_pOpen : rank == 9 ? source.lastRanks.r9_pOpen : rank == 10 ? source.lastRanks.r10_pOpen : rank == 11 ? source.lastRanks.r11_pOpen : rank == 12 ? source.lastRanks.r12_pOpen : source.lastRanks.r13_pOpen
+        cached.pClose := rank == 1 ? source.firstRanks.r1_pClose : rank == 2 ? source.firstRanks.r2_pClose : rank == 3 ? source.firstRanks.r3_pClose : rank == 4 ? source.firstRanks.r4_pClose : rank == 5 ? source.firstRanks.r5_pClose : rank == 6 ? source.firstRanks.r6_pClose : rank == 7 ? source.firstRanks.r7_pClose : rank == 8 ? source.lastRanks.r8_pClose : rank == 9 ? source.lastRanks.r9_pClose : rank == 10 ? source.lastRanks.r10_pClose : rank == 11 ? source.lastRanks.r11_pClose : rank == 12 ? source.lastRanks.r12_pClose : source.lastRanks.r13_pClose
+        cached.pHigh := rank == 1 ? source.firstRanks.r1_pHigh : rank == 2 ? source.firstRanks.r2_pHigh : rank == 3 ? source.firstRanks.r3_pHigh : rank == 4 ? source.firstRanks.r4_pHigh : rank == 5 ? source.firstRanks.r5_pHigh : rank == 6 ? source.firstRanks.r6_pHigh : rank == 7 ? source.firstRanks.r7_pHigh : rank == 8 ? source.lastRanks.r8_pHigh : rank == 9 ? source.lastRanks.r9_pHigh : rank == 10 ? source.lastRanks.r10_pHigh : rank == 11 ? source.lastRanks.r11_pHigh : rank == 12 ? source.lastRanks.r12_pHigh : source.lastRanks.r13_pHigh
+        cached.pLow := rank == 1 ? source.firstRanks.r1_pLow : rank == 2 ? source.firstRanks.r2_pLow : rank == 3 ? source.firstRanks.r3_pLow : rank == 4 ? source.firstRanks.r4_pLow : rank == 5 ? source.firstRanks.r5_pLow : rank == 6 ? source.firstRanks.r6_pLow : rank == 7 ? source.firstRanks.r7_pLow : rank == 8 ? source.lastRanks.r8_pLow : rank == 9 ? source.lastRanks.r9_pLow : rank == 10 ? source.lastRanks.r10_pLow : rank == 11 ? source.lastRanks.r11_pLow : rank == 12 ? source.lastRanks.r12_pLow : source.lastRanks.r13_pLow
+        cached.pComplete := rank == 1 ? source.firstRanks.r1_pComplete : rank == 2 ? source.firstRanks.r2_pComplete : rank == 3 ? source.firstRanks.r3_pComplete : rank == 4 ? source.firstRanks.r4_pComplete : rank == 5 ? source.firstRanks.r5_pComplete : rank == 6 ? source.firstRanks.r6_pComplete : rank == 7 ? source.firstRanks.r7_pComplete : rank == 8 ? source.lastRanks.r8_pComplete : rank == 9 ? source.lastRanks.r9_pComplete : rank == 10 ? source.lastRanks.r10_pComplete : rank == 11 ? source.lastRanks.r11_pComplete : rank == 12 ? source.lastRanks.r12_pComplete : source.lastRanks.r13_pComplete
+        cached.aOpen := rank == 1 ? source.firstRanks.r1_aOpen : rank == 2 ? source.firstRanks.r2_aOpen : rank == 3 ? source.firstRanks.r3_aOpen : rank == 4 ? source.firstRanks.r4_aOpen : rank == 5 ? source.firstRanks.r5_aOpen : rank == 6 ? source.firstRanks.r6_aOpen : rank == 7 ? source.firstRanks.r7_aOpen : rank == 8 ? source.lastRanks.r8_aOpen : rank == 9 ? source.lastRanks.r9_aOpen : rank == 10 ? source.lastRanks.r10_aOpen : rank == 11 ? source.lastRanks.r11_aOpen : rank == 12 ? source.lastRanks.r12_aOpen : source.lastRanks.r13_aOpen
+        cached.aClose := rank == 1 ? source.firstRanks.r1_aClose : rank == 2 ? source.firstRanks.r2_aClose : rank == 3 ? source.firstRanks.r3_aClose : rank == 4 ? source.firstRanks.r4_aClose : rank == 5 ? source.firstRanks.r5_aClose : rank == 6 ? source.firstRanks.r6_aClose : rank == 7 ? source.firstRanks.r7_aClose : rank == 8 ? source.lastRanks.r8_aClose : rank == 9 ? source.lastRanks.r9_aClose : rank == 10 ? source.lastRanks.r10_aClose : rank == 11 ? source.lastRanks.r11_aClose : rank == 12 ? source.lastRanks.r12_aClose : source.lastRanks.r13_aClose
+        cached.aHigh := rank == 1 ? source.firstRanks.r1_aHigh : rank == 2 ? source.firstRanks.r2_aHigh : rank == 3 ? source.firstRanks.r3_aHigh : rank == 4 ? source.firstRanks.r4_aHigh : rank == 5 ? source.firstRanks.r5_aHigh : rank == 6 ? source.firstRanks.r6_aHigh : rank == 7 ? source.firstRanks.r7_aHigh : rank == 8 ? source.lastRanks.r8_aHigh : rank == 9 ? source.lastRanks.r9_aHigh : rank == 10 ? source.lastRanks.r10_aHigh : rank == 11 ? source.lastRanks.r11_aHigh : rank == 12 ? source.lastRanks.r12_aHigh : source.lastRanks.r13_aHigh
+        cached.aLow := rank == 1 ? source.firstRanks.r1_aLow : rank == 2 ? source.firstRanks.r2_aLow : rank == 3 ? source.firstRanks.r3_aLow : rank == 4 ? source.firstRanks.r4_aLow : rank == 5 ? source.firstRanks.r5_aLow : rank == 6 ? source.firstRanks.r6_aLow : rank == 7 ? source.firstRanks.r7_aLow : rank == 8 ? source.lastRanks.r8_aLow : rank == 9 ? source.lastRanks.r9_aLow : rank == 10 ? source.lastRanks.r10_aLow : rank == 11 ? source.lastRanks.r11_aLow : rank == 12 ? source.lastRanks.r12_aLow : source.lastRanks.r13_aLow
+        cached.aComplete := rank == 1 ? source.firstRanks.r1_aComplete : rank == 2 ? source.firstRanks.r2_aComplete : rank == 3 ? source.firstRanks.r3_aComplete : rank == 4 ? source.firstRanks.r4_aComplete : rank == 5 ? source.firstRanks.r5_aComplete : rank == 6 ? source.firstRanks.r6_aComplete : rank == 7 ? source.firstRanks.r7_aComplete : rank == 8 ? source.lastRanks.r8_aComplete : rank == 9 ? source.lastRanks.r9_aComplete : rank == 10 ? source.lastRanks.r10_aComplete : rank == 11 ? source.lastRanks.r11_aComplete : rank == 12 ? source.lastRanks.r12_aComplete : source.lastRanks.r13_aComplete
+    not na(source) ? cached : na
 
 //==============================================================================
 // GXV AssetCorrelationUtils bridge
@@ -394,7 +623,7 @@ if corr_manual_mode
     corr_inv2 := corr_manual_pair2_ok ? smt_manual_pair2_inverted : false
     corr_inv3 := corr_manual_pair3_ok ? smt_manual_pair3_inverted : false
 else
-    GXV.AssetConfig corr_cfg = GXV.resolveAssetsByCorrelation(syminfo.ticker, syminfo.tickerid, syminfo.type, syminfo.session, false, smt_correlation_mode, smt_correlation_type)
+    var GXV.AssetConfig corr_cfg = GXV.resolveAssetsByCorrelation(syminfo.ticker, syminfo.tickerid, syminfo.type, syminfo.session, false, smt_correlation_mode, smt_correlation_type)
     corr_base_ok := corr_cfg.detected and f_has_symbol(corr_cfg.secondary) and not f_same_symbol(corr_cfg.secondary, syminfo.tickerid)
     corr_has_tertiary := corr_type_pair2 and corr_base_ok and f_has_symbol(corr_cfg.tertiary) and not f_same_symbol(corr_cfg.tertiary, syminfo.tickerid) and not f_same_symbol(corr_cfg.secondary, corr_cfg.tertiary)
     corr_has_quaternary := corr_type_pair3 and corr_has_tertiary and f_has_symbol(corr_cfg.quaternary) and not f_same_symbol(corr_cfg.quaternary, syminfo.tickerid) and not f_same_symbol(corr_cfg.quaternary, corr_cfg.secondary) and not f_same_symbol(corr_cfg.quaternary, corr_cfg.tertiary)
@@ -419,12 +648,17 @@ if corr_pair2_configured
     smt_source2 := request.security(tsym3, tf, f_smt_source_packet(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_off, ignore_invalid_symbol=true)
 if corr_pair3_configured
     smt_source3 := request.security(qsym4, tf, f_smt_source_packet(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_off, ignore_invalid_symbol=true)
-string smt_pair = corr_pair1_configured ? GXV.getAssetTicker(csym) : ""
-string smt_pair2 = corr_pair2_configured ? GXV.getAssetTicker(tsym3) : ""
-string smt_pair3 = corr_pair3_configured ? GXV.getAssetTicker(qsym4) : ""
-SmtCorrelationDescriptor smt_corr_pair1 = SmtCorrelationDescriptor.new(csym, smt_pair, corr_inv1, corr_pair1_configured, smt_source1)
-SmtCorrelationDescriptor smt_corr_pair2 = SmtCorrelationDescriptor.new(tsym3, smt_pair2, corr_inv2, corr_pair2_configured, smt_source2)
-SmtCorrelationDescriptor smt_corr_pair3 = SmtCorrelationDescriptor.new(qsym4, smt_pair3, corr_inv3, corr_pair3_configured, smt_source3)
+var string smt_pair = corr_pair1_configured ? GXV.getAssetTicker(csym) : ""
+var string smt_pair2 = corr_pair2_configured ? GXV.getAssetTicker(tsym3) : ""
+var string smt_pair3 = corr_pair3_configured ? GXV.getAssetTicker(qsym4) : ""
+// Resolver inputs and symbol identity are constant within one script run.
+// Reuse descriptors; only the current request result changes on each bar.
+var SmtCorrelationDescriptor smt_corr_pair1 = SmtCorrelationDescriptor.new(csym, smt_pair, corr_inv1, corr_pair1_configured, na)
+var SmtCorrelationDescriptor smt_corr_pair2 = SmtCorrelationDescriptor.new(tsym3, smt_pair2, corr_inv2, corr_pair2_configured, na)
+var SmtCorrelationDescriptor smt_corr_pair3 = SmtCorrelationDescriptor.new(qsym4, smt_pair3, corr_inv3, corr_pair3_configured, na)
+smt_corr_pair1.source := smt_source1
+smt_corr_pair2.source := smt_source2
+smt_corr_pair3.source := smt_source3
 
 //==============================================================================
 // GXV SMT market-state engine
